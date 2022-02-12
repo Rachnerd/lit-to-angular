@@ -1,0 +1,17 @@
+{
+  "name": "lit-to-angular",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd src && ts-node ./lit-to-angular.ts"
+  },
+  "author": "Rachnerd",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^17.0.17",
+    "ts-node": "^10.5.0",
+    "typescript": "^4.5.5"
+  }
+}
