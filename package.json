@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cd src && nodemon ./generators/source.generator.ts",
+    "start": "cd src && nodemon ./source.generator.ts",
     "test": "jest"
   },
   "author": "Rachnerd",

@@ -1,4 +1,12 @@
+function empty(): any {}
+
 export class PropertiesExample {
+  propPublic: any;
+  private propPrivate: any;
+
+  static propStatic: any;
+  private static propPrivateStatic: any;
+
   typedWithValue: string = "text";
   inlineInterfaceWithValue: {
     key: string;
@@ -29,4 +37,7 @@ export class PropertiesExample {
     2,
     { key: "value" },
   ];
+
+  @empty()
+  withDecorator: any;
 }

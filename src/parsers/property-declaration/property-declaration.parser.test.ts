@@ -1,15 +1,31 @@
 import * as ts from "typescript";
+import { parseDecorator } from "../decorator/decorator.parser";
+import { parseExpression } from "../expression/expression.parser";
 import { parsePropertyDeclaration } from "./property-declaration.parser";
 
+jest.mock("../decorator/decorator.parser", () => ({
+  parseDecorator: jest.fn(),
+}));
+
+jest.mock("../expression/expression.parser", () => ({
+  parseExpression: jest.fn(),
+}));
+
 describe("Property declaration parser", () => {
-  const MODIFIERS_EXAMPLE = "./test-files/modifiers.example.ts";
-  const PROPERTIES_EXAMPLE = "./test-files/properties.example.ts";
+  const PROPERTIES_EXAMPLE =
+    "./src/parsers/property-declaration/property-declaration.parser.example.ts";
+
+  const MOCKED_EXPRESSION = "MOCKED";
 
   let program: ts.Program;
 
   beforeEach(() => {
-    program = ts.createProgram([MODIFIERS_EXAMPLE, PROPERTIES_EXAMPLE], {});
+    program = ts.createProgram([PROPERTIES_EXAMPLE], {});
     program.getTypeChecker();
+  });
+
+  beforeEach(() => {
+    (parseExpression as jest.Mock).mockReturnValue(MOCKED_EXPRESSION);
   });
 
   const parseNode = (source: ts.Node, parse: (node: ts.Node) => void) => {
@@ -20,16 +36,21 @@ describe("Property declaration parser", () => {
     });
   };
 
-  it("should parse modifiers", () => {
-    const spy = jest.fn();
+  const spy = jest.fn();
 
-    parseNode(program.getSourceFile(MODIFIERS_EXAMPLE), (node) => {
+  beforeEach(() => {
+    parseNode(program.getSourceFile(PROPERTIES_EXAMPLE), (node) => {
       if (node.kind === ts.SyntaxKind.PropertyDeclaration) {
         spy(parsePropertyDeclaration(node as ts.PropertyDeclaration));
       }
     });
+  });
 
-    expect(spy).toHaveBeenCalledTimes(6);
+  it("should parse 11 properties", () => {
+    expect(spy).toHaveBeenCalledTimes(11);
+  });
+
+  it("should parse modifiers", () => {
     expect(spy).toHaveBeenNthCalledWith(1, {
       decorators: [],
       modifiers: [],
@@ -37,7 +58,6 @@ describe("Property declaration parser", () => {
       type: "any",
       value: undefined,
     });
-
     expect(spy).toHaveBeenNthCalledWith(2, {
       decorators: [],
       modifiers: ["private"],
@@ -45,60 +65,32 @@ describe("Property declaration parser", () => {
       type: "any",
       value: undefined,
     });
-
     expect(spy).toHaveBeenNthCalledWith(3, {
-      decorators: [],
-      modifiers: ["protected"],
-      name: "propProtected",
-      type: "any",
-      value: undefined,
-    });
-
-    expect(spy).toHaveBeenNthCalledWith(4, {
       decorators: [],
       modifiers: ["static"],
       name: "propStatic",
       type: "any",
       value: undefined,
     });
-
-    expect(spy).toHaveBeenNthCalledWith(5, {
+    expect(spy).toHaveBeenNthCalledWith(4, {
       decorators: [],
       modifiers: ["private", "static"],
       name: "propPrivateStatic",
       type: "any",
       value: undefined,
     });
-
-    expect(spy).toHaveBeenNthCalledWith(6, {
-      decorators: [],
-      modifiers: ["protected", "static"],
-      name: "propProtectedStatic",
-      type: "any",
-      value: undefined,
-    });
   });
 
   it("should parse types", () => {
-    const spy = jest.fn();
-
-    parseNode(program.getSourceFile(PROPERTIES_EXAMPLE), (node) => {
-      if (node.kind === ts.SyntaxKind.PropertyDeclaration) {
-        spy(parsePropertyDeclaration(node as ts.PropertyDeclaration));
-      }
-    });
-
-    expect(spy).toHaveBeenCalledTimes(6);
-
-    expect(spy).toHaveBeenNthCalledWith(1, {
+    expect(spy).toHaveBeenNthCalledWith(5, {
       decorators: [],
       modifiers: [],
       name: "typedWithValue",
       type: "string",
-      value: '"text"',
+      value: MOCKED_EXPRESSION,
     });
 
-    expect(spy).toHaveBeenNthCalledWith(2, {
+    expect(spy).toHaveBeenNthCalledWith(6, {
       decorators: [],
       modifiers: [],
       name: "inlineInterfaceWithValue",
@@ -107,10 +99,10 @@ describe("Property declaration parser", () => {
     value: number;
     inline: { key: string };
   }`,
-      value: { key: "key", value: 1, inline: { key: "value" } },
+      value: MOCKED_EXPRESSION,
     });
 
-    expect(spy).toHaveBeenNthCalledWith(3, {
+    expect(spy).toHaveBeenNthCalledWith(7, {
       decorators: [],
       modifiers: [],
       name: "nestedInlineInterfaceWithValue",
@@ -119,35 +111,39 @@ describe("Property declaration parser", () => {
     value: number;
     inline: { key: { key: { key: string } } };
   }`,
-      value: {
-        key: "key",
-        value: 1,
-        inline: { key: { key: { key: "value" } } },
-      },
+      value: MOCKED_EXPRESSION,
     });
 
-    expect(spy).toHaveBeenNthCalledWith(4, {
+    expect(spy).toHaveBeenNthCalledWith(8, {
       decorators: [],
       modifiers: [],
       name: "collection",
       type: "string[]",
-      value: ["1", "2", "3"],
+      value: MOCKED_EXPRESSION,
     });
 
-    expect(spy).toHaveBeenNthCalledWith(5, {
+    expect(spy).toHaveBeenNthCalledWith(9, {
       decorators: [],
       modifiers: [],
       name: "nestedCollection",
       type: "(string | string[])[]",
-      value: ["1", "2", ["1", "2"]],
+      value: MOCKED_EXPRESSION,
     });
 
-    expect(spy).toHaveBeenNthCalledWith(6, {
+    expect(spy).toHaveBeenNthCalledWith(10, {
       decorators: [],
       modifiers: [],
       name: "mixedCollection",
       type: "(string | number | { key: string })[]",
-      value: ["1", 2, { key: "value" }],
+      value: MOCKED_EXPRESSION,
     });
+  });
+
+  it("should parse expressions", () => {
+    expect(parseExpression).toHaveBeenCalledTimes(6);
+  });
+
+  it("should parse decorators", () => {
+    expect(parseDecorator).toHaveBeenCalledTimes(1);
   });
 });

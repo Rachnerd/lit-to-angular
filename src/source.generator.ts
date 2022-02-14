@@ -1,18 +1,21 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as ts from "typescript";
-import { parseClass, ParsedClass } from "../parsers/class.parser";
-import { ParsedMethod, parseMethod } from "../parsers/method.parser";
+import { parseClass, ParsedClass } from "./parsers/class/class.parser";
+import { ParsedMethod, parseMethod } from "./parsers/method/method.parser";
 import {
   ParsedProperty,
   parsePropertyDeclaration,
-} from "../parsers/property-declaration.parser";
-import { ParsedVariable, parseVariable } from "../parsers/variable.parser";
+} from "./parsers/property-declaration/property-declaration.parser";
+import {
+  ParsedVariable,
+  parseVariable,
+} from "./parsers/variable/variable.parser";
 import {
   initNormalizedByName as initNormalizedSet,
   NormalizedByName,
   addToNormalizedSet,
-} from "../utils/normalize-by-name.util";
+} from "./utils/normalize-by-name.util";
 
 const filename = "../lit-components/my-element.ts";
 const program = ts.createProgram([filename], {});

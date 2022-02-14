@@ -1,8 +1,6 @@
 import { html, css, LitElement } from "lit";
 import { customElement, property } from "lit/decorators.js";
 
-const hi: string = "123";
-
 /**
  * An example element.
  *
@@ -45,10 +43,6 @@ export class MyElement extends LitElement {
   private static _onClick() {
     this.count++;
   }
-
-  private foo(foo: string, bar: { type: string }): string {
-    return "foo";
-  }
 }
 
 declare global {
@@ -56,7 +50,3 @@ declare global {
     "my-element": MyElement;
   }
 }
-
-const foo: Object = {
-  test: () => "123",
-};

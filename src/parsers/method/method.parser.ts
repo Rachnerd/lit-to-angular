@@ -1,5 +1,5 @@
 import * as ts from "typescript";
-import { TYPE_INFERENCE } from "../constants/type.constant";
+import { TYPE_INFERENCE } from "../../constants/type.constant";
 
 export interface ParsedMethod {
   name: string;

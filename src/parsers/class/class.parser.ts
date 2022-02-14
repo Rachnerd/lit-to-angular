@@ -1,5 +1,5 @@
 import * as ts from "typescript";
-import { ParsedDecorator, parseDecorator } from "./decorator.parser";
+import { ParsedDecorator, parseDecorator } from "../decorator/decorator.parser";
 
 export interface ParsedClass {
   name: string;

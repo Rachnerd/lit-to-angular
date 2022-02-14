@@ -2,7 +2,8 @@ import * as ts from "typescript";
 import { parseDecorator } from "./decorator.parser";
 
 describe("Decorator parser", () => {
-  const DECORATORS_EXAMPLE = "./test-files/decorators.example.ts";
+  const DECORATORS_EXAMPLE =
+    "./src/parsers/decorator/decorator.parser.example.ts";
 
   let program: ts.Program;
 
@@ -32,11 +33,8 @@ describe("Decorator parser", () => {
       ) {
         expect(node.decorators.map(parseDecorator)).toEqual([
           { name: "empty", arguments: [] },
-          /**
-           * TODO: Parse arguments properly
-           */
-          { name: "singleArgument", arguments: ['"text"'] },
-          { name: "twoArguments", arguments: ['{}, { key: "key", value: 1 }'] },
+          { name: "singleArgument", arguments: ["text"] },
+          { name: "twoArguments", arguments: [{}, { key: "key", value: 1 }] },
         ]);
         spy(node.kind);
       }
