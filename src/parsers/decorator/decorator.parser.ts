@@ -10,7 +10,7 @@ export interface ParsedDecorator {
 }
 
 export const parseDecorator = (decorator: ts.Decorator): ParsedDecorator => {
-  const { expression, parent, ...de } = decorator;
+  const { expression } = decorator;
   const name = expression.getChildAt(0).getText();
   return {
     name,
