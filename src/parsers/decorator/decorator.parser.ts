@@ -9,14 +9,12 @@ export interface ParsedDecorator {
   arguments: SupportedExpression[];
 }
 
-export const parseDecorator = (decorator: ts.Decorator): ParsedDecorator => {
-  const { expression } = decorator;
-  const name = expression.getChildAt(0).getText();
-  return {
-    name,
-    arguments: parseDecoratorArguments(expression),
-  };
-};
+export const parseDecorator = ({
+  expression,
+}: ts.Decorator): ParsedDecorator => ({
+  name: expression.getChildAt(0).getText(),
+  arguments: parseDecoratorArguments(expression),
+});
 
 const parseDecoratorArguments = (
   expression: ts.LeftHandSideExpression

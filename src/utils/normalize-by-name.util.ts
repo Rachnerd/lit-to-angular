@@ -11,15 +11,19 @@ export interface NormalizableByName {
 
 export const initNormalizedByName = <T>(): NormalizedByName<T> => ({
   byName: {},
+
   allNames: [],
 });
 
 export const addToNormalizedSet = <T extends NormalizableByName>(
-  set: NormalizedByName<T>,
+  { byName, allNames }: NormalizedByName<T>,
   data: T
 ) => {
-  set.byName[data.name] = data;
-  set.allNames.push(data.name);
+  if (byName[data.name]) {
+    throw Error("Duplicate entry to normalized set: " + data.name);
+  }
+  byName[data.name] = data;
+  allNames.push(data.name);
 };
 
 export const toCollection = <T>({
