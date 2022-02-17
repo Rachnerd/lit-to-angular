@@ -11,6 +11,7 @@ import { parseTemplate } from "../template/template.parser";
 export type SupportedExpression =
   | Array<SupportedExpression>
   | { [key: string]: SupportedExpression }
+  | { [template: string]: SupportedExpression[] }
   | number
   | string
   | typeof NUMBER_CONTRUCTOR

@@ -7,20 +7,22 @@ import type {
 export const parseTemplate = (
   { template }: ts.TaggedTemplateExpression,
   parseExpression: ExpressionParser
-): SupportedExpression[] => {
+): SupportedExpression => {
   if (template.kind === ts.SyntaxKind.NoSubstitutionTemplateLiteral) {
-    return [template.text];
+    return { template: [template.text] };
   }
   if (template.kind === ts.SyntaxKind.TemplateExpression) {
     const { head, templateSpans } = template as ts.TemplateExpression;
-    return [
-      head.text,
-      ...templateSpans
-        .map(({ expression, literal }) => [
-          parseExpression(expression),
-          literal.text,
-        ])
-        .reduce((acc, pieces) => [...acc, ...pieces], []),
-    ];
+    return {
+      template: [
+        head.text,
+        ...templateSpans
+          .map(({ expression, literal }) => [
+            parseExpression(expression),
+            literal.text,
+          ])
+          .reduce((acc, pieces) => [...acc, ...pieces], []),
+      ],
+    };
   }
 };
