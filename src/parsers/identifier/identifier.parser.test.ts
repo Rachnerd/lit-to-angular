@@ -46,9 +46,9 @@ describe("Identifier parser", () => {
       }
     });
     expect(spy).toHaveBeenCalledTimes(3);
-    expect(spy).toHaveBeenNthCalledWith(
-      3,
-      '/*{{{"type":"Variable","name":"cssVariable"}}}*/'
-    );
+    expect(spy).toHaveBeenNthCalledWith(3, {
+      type: "Variable",
+      name: "cssVariable",
+    });
   });
 });

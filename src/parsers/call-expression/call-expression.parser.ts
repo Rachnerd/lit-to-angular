@@ -6,11 +6,10 @@ export const parseCallExpression = (
   parseExpression: ExpressionParser
 ) => {
   if (parent.kind === ts.SyntaxKind.TemplateSpan) {
-    const methodCall = {
+    return {
       type: "MethodCall",
       name: methodExpression.getText(),
       arguments: args.map(parseExpression),
     };
-    return `/*--${JSON.stringify(methodCall)}--*/`;
   }
 };

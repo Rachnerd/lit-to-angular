@@ -11,20 +11,9 @@ export const parseIdentifier = ({ text, parent }: ts.Identifier) => {
     return STRING_CONTRUCTOR;
   }
   if (parent.kind === ts.SyntaxKind.TemplateSpan) {
-    if (isCssTemplate(parent)) {
-      const variable = {
-        type: "Variable",
-        name: text,
-      };
-      return `/*{{${JSON.stringify(variable)}}}*/`;
-    }
-  }
-};
-
-const isCssTemplate = (node: ts.Node) => {
-  let n: any = node;
-  while (n) {
-    if (n.tag?.text === "css") return true;
-    n = n.parent;
+    return {
+      type: "Variable",
+      name: text,
+    };
   }
 };
